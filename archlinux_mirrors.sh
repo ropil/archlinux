@@ -31,12 +31,12 @@ let LISTSTART=${NUMSETTINGS};
 
 # I/O-check and help text
 if [ $# -lt ${NUMREQUIRED} ]; then
-  echo "USAGE: [PACD=${PACD}] $0 <locales> <name> <mirrorlist>";
+  echo "USAGE: [PACD=${PACD}] $0 <name> <mirrorlist> <locales>";
   echo "";
   echo " OPTIONS:";
-  echo "  locales    - mirror locales (ex Worldwide,Sweden)";
   echo "  name       - name of mirrorlist (rankings from)";
   echo "  mirrorlist - mirrorlist to process, (ex .pacnew)";
+  echo "  locales    - mirror locales (ex Worldwide,Sweden)";
   echo "";
   echo " ENVIRONMENT:";
   echo "  PACD - Where to store and link new mirrorlist";
@@ -53,9 +53,9 @@ if [ $# -lt ${NUMREQUIRED} ]; then
 fi;
 
 # Parse settings
-locales=$1;
-name=$2;
-mirrorlist=$3;
+name=$1;
+mirrorlist=$2;
+locales=$3;
 
 temp_mirrorlist="${PACD}/mirrorlist.subset";
 link_mirrorlist="${PACD}/mirrorlist";
