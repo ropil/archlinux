@@ -16,15 +16,22 @@ def read_mirrors(infile):
     return mirrors
 
 
+def get_countries(mirrors):
+    countries = list(mirrors.keys())
+    countries.sort()
+    return countries
+
+
+def parse_countries(definition):
+    return [country for country in definition.split(",")]
+
+
 def print_mirrors(mirrors, countries):
     for country in countries:
         print("# " + country)
         for mirror in mirrors[country]:
             print("Server = " + mirror)
 
-
-def parse_countries(definition):
-    return [country for country in definition.split(",")]
 
 # Main; for callable scripts
 def main():
@@ -33,8 +40,8 @@ def main():
     parser = ArgumentParser(
         description="Parse mirrorlist.pacnew.")
     parser.add_argument(
-        "-c", nargs=1, metavar="country1[,country2[...]]",
-        help="Comma separated list of countries to enable")
+        "-c", nargs=1, default=[None], metavar="country1[,country2[...]]",
+        help="Comma separated list of countries to enable, default=Enable all")
     parser.add_argument(
         "files", nargs="*", metavar="FILE", help="mirrorlist.pacnew to parse")
     arguments = parser.parse_args(argv[1:])
@@ -44,7 +51,7 @@ def main():
         files = [stdin]
 
     # Set variables here
-    countries = parse_countries(arguments.c[0])
+    countries = arguments.c[0]
     mirrors = {}
 
     # Parse STDIN or files
@@ -55,6 +62,13 @@ def main():
             infile = open(f, 'r')
         mirrors = read_mirrors(infile)
         infile.close()
+
+    # Get all countries if no selection specified
+    if countries is None:
+        countries = get_countries(mirrors)
+    else:
+        # Otherwise use selection
+        countries = parse_countries(arguments.c[0])
 
     print_mirrors(mirrors, countries)
 
