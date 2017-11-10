@@ -17,6 +17,11 @@
 #   along with this program. If not, see <http://www.gnu.org/licenses/>.
 set -e;
 
+# Set default values
+if [ -z ${PACD} ]; then
+  PACD="/etc/pacman.d";
+fi
+
 # Number of settings options
 NUMSETTINGS=3;
 # If you require a target list, of minimum 1, otherwise NUMSETTINGS
@@ -26,7 +31,7 @@ let LISTSTART=${NUMSETTINGS};
 
 # I/O-check and help text
 if [ $# -lt ${NUMREQUIRED} ]; then
-  echo "USAGE: [PACD=/etc/pacman.d] $0 <locales> <name> <mirrorlist>";
+  echo "USAGE: [PACD=${PACD}] $0 <locales> <name> <mirrorlist>";
   echo "";
   echo " OPTIONS:";
   echo "  locales    - mirror locales (ex Worldwide,Sweden)";
@@ -37,8 +42,8 @@ if [ $# -lt ${NUMREQUIRED} ]; then
   echo "  PACD - Where to store and link new mirrorlist";
   echo "";
   echo " EXAMPLES:";
-  echo "  # Run on three files, with ENV1=1";
-  echo "  ENV1=1 $0 file1 file2 file3 > output.txt";
+  echo "  # Run on three files, with default PACD";
+  echo "  PACD=${PACD} $0 file1 file2 file3 > output.txt";
   echo "";
   echo "archlinux_mirrors  Copyright (C) 2017  Robert Pilstål;"
   echo "This program comes with ABSOLUTELY NO WARRANTY.";
@@ -51,11 +56,6 @@ fi;
 locales=$1;
 name=$2;
 mirrorlist=$3;
-
-# Set default values
-if [ -z ${PACD} ]; then
-  PACD="/etc/pacman.d";
-fi
 
 temp_mirrorlist="${PACD}/mirrorlist.subset";
 link_mirrorlist="${PACD}/mirrorlist";
